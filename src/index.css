@@ -1,0 +1,361 @@
+/* ==========================================================================
+   BELTEI INTERNATIONAL UNIVERSITY (BIU) - OFFICIAL DESIGN SYSTEM & STYLES
+   Inspected & aligned with official brand identity: https://beltei.edu.kh/biu
+   ========================================================================== */
+
+:root {
+  /* Official Brand Colors */
+  --color-primary: #006cb8;          /* Official header blue */
+  --color-primary-hover: #005592;
+  --color-primary-light: #e6f3fa;
+  --color-navy: #0f2263;             /* Official academic deep blue */
+  --color-navy-dark: #0a1744;
+  --color-navy-light: #1b358a;
+  --color-gold: #fdb515;             /* Official gold border & badge */
+  --color-gold-hover: #e5a00a;
+  --color-gold-light: #fff8e6;
+  --color-gold-deep: #c1aa3f;
+  --color-red: #e23439;              /* Official crimson red */
+  --color-red-hover: #c4262b;
+  --color-green: #39a753;            /* Campus green */
+
+  /* 13 Official Faculty Color Identifiers */
+  --faculty-bba: #e23439;   /* Business Administration */
+  --faculty-bfb: #8e2f39;   /* Finance and Banking */
+  --faculty-beco: #006f87;  /* Economics */
+  --faculty-blaw: #0f2263;  /* Law */
+  --faculty-bedu: #4156a3;  /* Education, Arts & Humanities */
+  --faculty-bth: #39a753;   /* Tourism & Hospitality */
+  --faculty-bit: #c1aa3f;   /* IT & Science */
+  --faculty-bdt: #8f61a7;   /* Digital Tech & Telecom */
+  --faculty-beng: #ee8a36;  /* Engineering */
+  --faculty-barch: #f3868c; /* Architecture */
+  --faculty-bir: #55545e;   /* International Relations */
+  --faculty-bca: #42b7da;   /* Civil Aviation */
+  --faculty-bchn: #ffc62a;  /* Chinese Language */
+
+  /* Light Theme Defaults */
+  --bg-page: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-surface-subtle: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --border-subtle: #e2e8f0;
+  --border-medium: #cbd5e1;
+  --border-gold: #fdb515;
+  --card-shadow: 0 4px 20px -2px rgba(15, 34, 99, 0.08);
+  --card-shadow-hover: 0 12px 30px -4px rgba(15, 34, 99, 0.16);
+  --glow-gold: 0 0 15px rgba(253, 181, 21, 0.35);
+
+  /* Typography */
+  --font-en: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-khmer-title: 'Moul', serif;
+  --font-khmer-body: 'Kantumruy Pro', 'Battambang', sans-serif;
+
+  /* Transitions */
+  --transition-fast: 0.18s ease;
+  --transition-smooth: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Container */
+  --container-max: 1280px;
+}
+
+/* Dark Theme (Academic Deep Charcoal/Navy) */
+[data-theme="dark"] {
+  --bg-page: #0b1120;
+  --bg-surface: #0f172a;
+  --bg-surface-elevated: #1e293b;
+  --bg-surface-subtle: #162036;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border-subtle: #1e293b;
+  --border-medium: #334155;
+  --card-shadow: 0 4px 25px -2px rgba(0, 0, 0, 0.5);
+  --card-shadow-hover: 0 14px 35px -4px rgba(0, 0, 0, 0.7);
+  --color-primary-light: #132b45;
+  --color-gold-light: #2c2514;
+}
+
+/* Reset and Base Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-en);
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color var(--transition-smooth), color var(--transition-smooth);
+}
+
+/* Khmer Font Classes */
+.font-khmer-title {
+  font-family: var(--font-khmer-title);
+  letter-spacing: 0.02em;
+}
+
+.font-khmer {
+  font-family: var(--font-khmer-body);
+}
+
+/* Typography styles */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+p {
+  color: var(--text-secondary);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-surface-subtle);
+}
+::-webkit-scrollbar-thumb {
+  background: #006cb8;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #0f2263;
+}
+
+/* Layout Utilities */
+.app-container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .app-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.section-padding {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+@media (max-width: 768px) {
+  .section-padding {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+}
+
+/* Button Variants */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 0.5rem;
+  background-color: var(--color-primary);
+  color: #ffffff !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 14px rgba(0, 108, 184, 0.35);
+  transition: all var(--transition-smooth);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 108, 184, 0.45);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 0.5rem;
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all var(--transition-smooth);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-primary);
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 0.5rem;
+  background-color: var(--color-gold);
+  color: #0f172a !important;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 14px rgba(253, 181, 21, 0.4);
+  transition: all var(--transition-smooth);
+}
+
+.btn-gold:hover {
+  background-color: var(--color-gold-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(253, 181, 21, 0.5);
+}
+
+.btn-outline-white {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  color: #ffffff !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all var(--transition-smooth);
+}
+
+.btn-outline-white:hover {
+  background: #ffffff;
+  color: var(--color-navy) !important;
+  border-color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* Card Style */
+.academic-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.75rem;
+  box-shadow: var(--card-shadow);
+  transition: all var(--transition-smooth);
+  overflow: hidden;
+}
+
+.academic-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--border-medium);
+}
+
+/* Badge Styles */
+.badge-gold {
+  background-color: var(--color-gold-light);
+  color: #8c6300;
+  border: 1px solid var(--color-gold);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.badge-blue {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  border: 1px solid rgba(0, 108, 184, 0.3);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Glassmorphism & Overlays */
+.glass-header {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+[data-theme="dark"] .glass-header {
+  background: rgba(15, 23, 42, 0.95);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Institutional Header Bar */
+.top-institutional-bar {
+  background: linear-gradient(90deg, #0f2263 0%, #006cb8 100%);
+  color: #ffffff;
+  font-size: 0.82rem;
+  padding: 0.45rem 0;
+  border-bottom: 2px solid var(--color-gold);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Responsive tables & media */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
