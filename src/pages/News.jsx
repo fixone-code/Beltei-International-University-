@@ -72,6 +72,8 @@ export const News = () => {
                 <img
                   src={featuredArticle.image}
                   alt={featuredArticle.titleEn}
+                  loading="lazy"
+                  decoding="async"
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
               </div>

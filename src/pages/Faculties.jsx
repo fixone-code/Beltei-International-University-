@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { 
   Search, BookOpen, GraduationCap, 
@@ -19,16 +19,23 @@ const categories = [
 
 export const Faculties = () => {
   const { language, t } = useApp();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const selectedId = searchParams.get('selected');
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
-  const [selectedFaculty, setSelectedFaculty] = useState(() => {
-    if (selectedId) {
-      return faculties.find(f => f.id === parseInt(selectedId)) || null;
-    }
-    return null;
-  });
+  const selectedFaculty = faculties.find((faculty) => faculty.id === Number(selectedId)) || null;
+
+  const openFaculty = (faculty) => {
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.set('selected', String(faculty.id));
+    setSearchParams(nextParams, { preventScrollReset: true });
+  };
+
+  const closeFaculty = () => {
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete('selected');
+    setSearchParams(nextParams, { preventScrollReset: true });
+  };
 
   const filteredFaculties = useMemo(() => {
     return faculties.filter(faculty => {
@@ -177,7 +184,7 @@ export const Faculties = () => {
           ) : (
             <div className="grid-3">
               {filteredFaculties.map((faculty) => (
-                <div key={faculty.id} onClick={() => setSelectedFaculty(faculty)}>
+                <div key={faculty.id} onClick={() => openFaculty(faculty)}>
                   <FacultyCard faculty={faculty} />
                 </div>
               ))}
@@ -188,9 +195,12 @@ export const Faculties = () => {
 
       {/* Faculty Detail Modal */}
       {selectedFaculty && (
-        <div className="modal-overlay" onClick={() => setSelectedFaculty(null)}>
+        <div className="modal-overlay" onClick={closeFaculty}>
           <div 
             className="modal-content" 
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="faculty-modal-title"
             onClick={(e) => e.stopPropagation()}
             style={{ maxWidth: '780px', maxHeight: '90vh' }}
           >
@@ -207,7 +217,7 @@ export const Faculties = () => {
                 <span className="badge-blue" style={{ marginBottom: '0.35rem' }}>
                   {selectedFaculty.code} • {language === 'km' ? `មហាវិទ្យាល័យទី ${selectedFaculty.id}` : `Faculty #0${selectedFaculty.id}`}
                 </span>
-                <h3 className="font-khmer" style={{ fontSize: '1.35rem', color: 'var(--text-primary)', margin: 0 }}>
+                <h3 id="faculty-modal-title" className="font-khmer" style={{ fontSize: '1.35rem', color: 'var(--text-primary)', margin: 0 }}>
                   {selectedFaculty.nameKh}
                 </h3>
                 <h4 style={{ fontSize: '1.05rem', fontWeight: 600, color: 'var(--color-navy)', margin: '0.25rem 0 0 0' }}>
@@ -215,7 +225,7 @@ export const Faculties = () => {
                 </h4>
               </div>
               <button 
-                onClick={() => setSelectedFaculty(null)}
+                onClick={closeFaculty}
                 className="icon-btn"
                 aria-label="Close"
               >
@@ -288,7 +298,7 @@ export const Faculties = () => {
 
             {/* Modal Footer */}
             <div style={{ padding: '1.25rem 1.5rem', borderTop: '1px solid var(--border-subtle)', background: 'var(--bg-surface-subtle)', display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
-              <button onClick={() => setSelectedFaculty(null)} className="btn-secondary" style={{ padding: '0.6rem 1.25rem' }}>
+              <button onClick={closeFaculty} className="btn-secondary" style={{ padding: '0.6rem 1.25rem' }}>
                 Close
               </button>
               <a 

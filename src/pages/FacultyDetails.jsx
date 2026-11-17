@@ -96,6 +96,8 @@ export const FacultyDetails = () => {
           className="faculty-detail-hero-image"
           src={faculty.bookletImage}
           alt=""
+          fetchPriority="high"
+          decoding="async"
           onError={(event) => {
             event.currentTarget.onerror = null;
             event.currentTarget.src = '/images/campus1_tuolsleng.png';

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://beltei-international-university.netlify.app/sitemap.xml

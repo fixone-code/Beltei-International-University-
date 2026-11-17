@@ -55,12 +55,19 @@ export const SearchBar = () => {
 
   return (
     <div className="modal-overlay" onClick={closeSearch}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="modal-content"
+        role="dialog"
+        aria-modal="true"
+        aria-label={t('searchPlaceholder')}
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Search Input Bar */}
         <div style={{ display: 'flex', alignItems: 'center', padding: '1.25rem 1.5rem', borderBottom: '1px solid var(--border-subtle)', gap: '0.75rem' }}>
           <Search size={22} style={{ color: 'var(--color-primary)' }} />
           <input 
             type="text" 
+            aria-label={t('searchPlaceholder')}
             autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -76,6 +83,8 @@ export const SearchBar = () => {
           />
           {query && (
             <button 
+              type="button"
+              aria-label={language === 'km' ? 'សម្អាតការស្វែងរក' : 'Clear search'}
               onClick={() => setQuery('')}
               style={{ color: 'var(--text-muted)', padding: '4px' }}
             >
@@ -83,6 +92,8 @@ export const SearchBar = () => {
             </button>
           )}
           <button 
+            type="button"
+            aria-label={language === 'km' ? 'បិទការស្វែងរក' : 'Close search'}
             onClick={closeSearch}
             className="icon-btn"
             style={{ width: '32px', height: '32px' }}
@@ -144,10 +155,12 @@ export const SearchBar = () => {
                   </h4>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                     {searchResults.faculties.map((f) => (
-                      <div 
+                      <button
+                        type="button"
                         key={f.id}
                         onClick={() => handleSelect(`/faculties?selected=${f.id}`)}
                         style={{
+                          width: '100%',
                           padding: '0.75rem 1rem',
                           borderRadius: '8px',
                           background: 'var(--bg-surface-subtle)',
@@ -155,7 +168,9 @@ export const SearchBar = () => {
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
-                          borderLeft: `4px solid ${f.color}`
+                          border: 0,
+                          borderLeft: `4px solid ${f.color}`,
+                          textAlign: 'left'
                         }}
                       >
                         <div>
@@ -165,7 +180,7 @@ export const SearchBar = () => {
                           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Code: {f.code}</span>
                         </div>
                         <ArrowRight size={16} style={{ color: 'var(--text-muted)' }} />
-                      </div>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -180,17 +195,21 @@ export const SearchBar = () => {
                   </h4>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                     {searchResults.programs.map((p) => (
-                      <div 
+                      <button
+                        type="button"
                         key={p.id}
                         onClick={() => handleSelect(`/programs?filter=${p.level}`)}
                         style={{
+                          width: '100%',
                           padding: '0.75rem 1rem',
                           borderRadius: '8px',
                           background: 'var(--bg-surface-subtle)',
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'space-between'
+                          justifyContent: 'space-between',
+                          border: 0,
+                          textAlign: 'left'
                         }}
                       >
                         <div>
@@ -200,7 +219,7 @@ export const SearchBar = () => {
                           <span style={{ fontSize: '0.78rem', color: 'var(--color-primary)' }}>Level: {p.level.toUpperCase()}</span>
                         </div>
                         <ArrowRight size={16} style={{ color: 'var(--text-muted)' }} />
-                      </div>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -215,17 +234,21 @@ export const SearchBar = () => {
                   </h4>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                     {searchResults.news.map((n) => (
-                      <div 
+                      <button
+                        type="button"
                         key={n.id}
                         onClick={() => handleSelect(`/news/${n.id}`)}
                         style={{
+                          width: '100%',
                           padding: '0.75rem 1rem',
                           borderRadius: '8px',
                           background: 'var(--bg-surface-subtle)',
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'space-between'
+                          justifyContent: 'space-between',
+                          border: 0,
+                          textAlign: 'left'
                         }}
                       >
                         <div>
@@ -235,7 +258,7 @@ export const SearchBar = () => {
                           <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{n.date}</span>
                         </div>
                         <ArrowRight size={16} style={{ color: 'var(--text-muted)' }} />
-                      </div>
+                      </button>
                     ))}
                   </div>
                 </div>

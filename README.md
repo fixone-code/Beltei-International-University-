@@ -201,16 +201,24 @@ npm run build
 npm run preview
 ```
 
-## 🚀 Deploying to Vercel
+## 🚀 Deploying to Netlify
 
-This project is a React single-page application built with Vite. When importing the `ass1` folder as the repository root, use:
+This project is a React single-page application built with Vite. In Netlify, import the repository containing `ass1` and configure the site root:
 
-- **Framework preset**: Vite
-- **Install command**: `npm install`
+- **Base directory**: `ass1` if the repository contains the parent `Assignment` folder; otherwise leave it blank.
 - **Build command**: `npm run build`
-- **Output directory**: `dist`
+- **Publish directory**: `dist`
+- **Node version**: 22 (configured in `netlify.toml`)
 
-`vercel.json` routes page requests back through the app so React Router pages continue to work when opened or refreshed directly. If the GitHub repository contains the parent `Assignment` folder, set the Vercel **Root Directory** to `ass1`; otherwise, leave it as `.`. Keep credentials in Vercel environment-variable settings, not in committed `.env` files.
+`netlify.toml` also configures React Router refresh rewrites, security headers, and cache rules. `public/robots.txt` and `public/sitemap.xml` are published automatically. The configured canonical site URL is `https://beltei-international-university.netlify.app/`.
+
+### Google Search Console
+
+1. Deploy the site and confirm the Netlify URL is publicly accessible.
+2. In Google Search Console, add the URL-prefix property `https://beltei-international-university.netlify.app/`.
+3. Use the HTML-tag verification method and copy the verification meta tag Google provides into `index.html` inside `<head>`. No verification token is currently present or assumed.
+4. Deploy the change, then click **Verify** in Search Console.
+5. Submit `https://beltei-international-university.netlify.app/sitemap.xml` under **Sitemaps**. Indexing is subject to Google's crawl and indexing decisions.
 
 ---
 

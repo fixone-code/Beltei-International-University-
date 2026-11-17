@@ -77,6 +77,8 @@ export const About = () => {
                 <img 
                   src="/images/leadership/dr_lychheng.jpg" 
                   alt="H.E. Dr. Ly Chheng"
+                  loading="lazy"
+                  decoding="async"
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
               </div>
@@ -265,6 +267,8 @@ export const About = () => {
               <img 
                 src="/images/asaihl_logo.png" 
                 alt="ASAIHL Association"
+                loading="lazy"
+                decoding="async"
                 style={{ height: '70px', width: 'auto', objectFit: 'contain' }}
               />
               <div>
@@ -281,6 +285,8 @@ export const About = () => {
               <img 
                 src="/images/researchjournal.png" 
                 alt="BIU Research Journal"
+                loading="lazy"
+                decoding="async"
                 style={{ height: '70px', width: 'auto', objectFit: 'contain' }}
               />
               <div>

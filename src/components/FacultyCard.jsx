@@ -16,6 +16,8 @@ export const FacultyCard = ({ faculty }) => {
           src={faculty.bookletImage} 
           alt={faculty.nameEn}
           className="faculty-card-img"
+          loading="lazy"
+          decoding="async"
           onError={(e) => {
             // graceful fallback to campus image if booklet path is not cached
             e.target.onerror = null;

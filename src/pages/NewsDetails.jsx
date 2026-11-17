@@ -1,7 +1,7 @@
 import React from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { 
-  Calendar, Clock, User, ArrowLeft, Tag, 
+  Calendar, Clock, User, ArrowLeft,
   Share2, ArrowRight, Newspaper, Building 
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
@@ -11,15 +11,13 @@ import { newsArticles } from '../data/news';
 export const NewsDetails = () => {
   const { id } = useParams();
   const { language, t } = useApp();
-  const navigate = useNavigate();
-
   const article = newsArticles.find(n => n.id === id);
 
   if (!article) {
     return (
       <div className="app-container section-padding" style={{ textAlign: 'center' }}>
         <Newspaper size={48} style={{ color: 'var(--text-muted)', margin: '0 auto 1rem auto' }} />
-        <h2>Article Not Found</h2>
+        <h1>Article Not Found</h1>
         <p style={{ marginBottom: '1.5rem' }}>The requested article could not be located.</p>
         <Link to="/news" className="btn-primary">Back to News</Link>
       </div>
@@ -87,6 +85,8 @@ export const NewsDetails = () => {
             <img 
               src={article.image} 
               alt={article.titleEn}
+              loading="lazy"
+              decoding="async"
               style={{ width: '100%', height: 'auto', display: 'block' }}
             />
           </div>
@@ -115,12 +115,18 @@ export const NewsDetails = () => {
 
               <div style={{ display: 'flex', gap: '0.5rem' }}>
                 <button 
-                  onClick={() => {
-                    navigator.clipboard?.writeText(window.location.href);
-                    alert('Link copied to clipboard!');
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText(window.location.href);
+                      window.alert('Link copied to clipboard!');
+                    } catch (error) {
+                      console.error('Unable to copy the article link:', error);
+                      window.alert('Unable to copy the link. Copy the page address from your browser.');
+                    }
                   }}
                   className="icon-btn" 
                   title="Share Article"
+                  aria-label="Copy article link"
                 >
                   <Share2 size={16} />
                 </button>

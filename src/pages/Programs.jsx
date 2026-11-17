@@ -12,10 +12,8 @@ import { programs, degreeLevels } from '../data/programs';
 
 export const Programs = () => {
   const { language, t } = useApp();
-  const [searchParams] = useSearchParams();
-  const [activeLevel, setActiveLevel] = useState(() => {
-    return searchParams.get('filter') || 'all';
-  });
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeLevel = searchParams.get('filter') || 'all';
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredPrograms = useMemo(() => {
@@ -116,7 +114,12 @@ export const Programs = () => {
               {degreeLevels.map((lvl) => (
                 <button
                   key={lvl.id}
-                  onClick={() => setActiveLevel(lvl.id)}
+                  onClick={() => {
+                    const nextParams = new URLSearchParams(searchParams);
+                    if (lvl.id === 'all') nextParams.delete('filter');
+                    else nextParams.set('filter', lvl.id);
+                    setSearchParams(nextParams, { preventScrollReset: true });
+                  }}
                   style={{
                     padding: '0.55rem 1.25rem',
                     borderRadius: '9999px',

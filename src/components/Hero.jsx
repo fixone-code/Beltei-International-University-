@@ -14,6 +14,8 @@ export const Hero = () => {
         src="/images/campus1_tuolsleng.png" 
         alt="BELTEI International University Campus 1 Tuol Sleng" 
         className="hero-bg-img"
+        fetchPriority="high"
+        decoding="async"
       />
       <div className="hero-bg-overlay" />
 

@@ -142,6 +142,8 @@ export const Home = () => {
                 <img 
                   src="/images/campus2_chaomchao.png" 
                   alt="BELTEI International University Campus 2" 
+                  loading="lazy"
+                  decoding="async"
                   style={{ width: '100%', height: '380px', objectFit: 'cover' }}
                 />
               </div>
@@ -273,6 +275,8 @@ export const Home = () => {
                   <img 
                     src={facility.image} 
                     alt={facility.titleEn}
+                    loading="lazy"
+                    decoding="async"
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                 </div>

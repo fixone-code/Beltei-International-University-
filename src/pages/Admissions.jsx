@@ -25,7 +25,6 @@ export const Admissions = () => {
 
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // FAQ Accordion State
   const [openFaq, setOpenFaq] = useState(0);
@@ -100,7 +99,7 @@ export const Admissions = () => {
     const errors = {};
     if (!formData.fullName.trim()) errors.fullName = 'Please enter your full name';
     if (!formData.email.trim() || !/\S+@\S+\.\S+/.test(formData.email)) errors.email = 'Valid email is required';
-    if (!formData.phone.trim() || formData.phone.length < 8) errors.phone = 'Valid phone number is required';
+    if (!/^[0-9]{8,15}$/.test(formData.phone.replace(/[\s()+.-]/g, ''))) errors.phone = 'Valid phone number is required';
     if (!formData.program) errors.program = 'Please select a program of interest';
     return errors;
   };
@@ -111,11 +110,7 @@ export const Admissions = () => {
     setFormErrors(errors);
 
     if (Object.keys(errors).length === 0) {
-      setIsSubmitting(true);
-      setTimeout(() => {
-        setIsSubmitting(false);
-        setIsSubmitted(true);
-      }, 700);
+      setIsSubmitted(true);
     }
   };
 
@@ -256,12 +251,12 @@ export const Admissions = () => {
                     <Check size={32} />
                   </div>
                   <h4 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-                    {language === 'km' ? 'ការដាក់ពាក្យសាកល្បងជោគជ័យ!' : 'Demonstration Application Received!'}
+                    {language === 'km' ? 'ការសាកល្បងបានបញ្ចប់ — មិនបានផ្ញើពាក្យសុំទេ' : 'Demo complete — no application was sent'}
                   </h4>
                   <p style={{ fontSize: '0.92rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', maxWidth: '420px', margin: '0 auto 1.5rem auto' }}>
                     {language === 'km'
-                      ? `សូមអរគុណ ${formData.fullName} ព័ត៌មានរបស់អ្នកត្រូវបានផ្ទៀងផ្ទាត់ដោយជោគជ័យក្នុងកម្មវិធីគំរូនេះ។`
-                      : `Thank you, ${formData.fullName}. Your demonstration submission has been simulated successfully.`}
+                      ? `សូមអរគុណ ${formData.fullName}។ ព័ត៌មាននេះមិនត្រូវបានរក្សាទុក ឬបញ្ជូនទៅសាកលវិទ្យាល័យទេ។`
+                      : `Thank you, ${formData.fullName}. This demonstration did not store or send your information.`}
                   </p>
                   <button 
                     onClick={() => {
@@ -282,14 +277,19 @@ export const Admissions = () => {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                <form noValidate onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                   {/* Full Name */}
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
+                    <label htmlFor="admissions-full-name" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
                       {t('fullName')} *
                     </label>
                     <input 
+                      id="admissions-full-name"
                       type="text" 
+                      required
+                      autoComplete="name"
+                      aria-invalid={Boolean(formErrors.fullName)}
+                      aria-describedby={formErrors.fullName ? 'admissions-full-name-error' : undefined}
                       value={formData.fullName}
                       onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                       placeholder="e.g. Sok Vannak / John Smith"
@@ -302,17 +302,22 @@ export const Admissions = () => {
                         color: 'var(--text-primary)'
                       }}
                     />
-                    {formErrors.fullName && <span style={{ color: 'var(--color-red)', fontSize: '0.75rem', marginTop: '3px', display: 'block' }}>{formErrors.fullName}</span>}
+                    {formErrors.fullName && <span id="admissions-full-name-error" role="alert" style={{ color: 'var(--color-red)', fontSize: '0.75rem', marginTop: '3px', display: 'block' }}>{formErrors.fullName}</span>}
                   </div>
 
                   {/* Email & Phone Grid */}
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
+                      <label htmlFor="admissions-email" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
                         {t('emailAddress')} *
                       </label>
                       <input 
+                        id="admissions-email"
                         type="email" 
+                        required
+                        autoComplete="email"
+                        aria-invalid={Boolean(formErrors.email)}
+                        aria-describedby={formErrors.email ? 'admissions-email-error' : undefined}
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="student@example.com"
@@ -325,15 +330,20 @@ export const Admissions = () => {
                           color: 'var(--text-primary)'
                         }}
                       />
-                      {formErrors.email && <span style={{ color: 'var(--color-red)', fontSize: '0.75rem', marginTop: '3px', display: 'block' }}>{formErrors.email}</span>}
+                      {formErrors.email && <span id="admissions-email-error" role="alert" style={{ color: 'var(--color-red)', fontSize: '0.75rem', marginTop: '3px', display: 'block' }}>{formErrors.email}</span>}
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
+                      <label htmlFor="admissions-phone" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
                         {t('phoneNumber')} *
                       </label>
                       <input 
+                        id="admissions-phone"
                         type="tel" 
+                        required
+                        autoComplete="tel"
+                        aria-invalid={Boolean(formErrors.phone)}
+                        aria-describedby={formErrors.phone ? 'admissions-phone-error' : undefined}
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         placeholder="012 345 678"
@@ -346,16 +356,20 @@ export const Admissions = () => {
                           color: 'var(--text-primary)'
                         }}
                       />
-                      {formErrors.phone && <span style={{ color: 'var(--color-red)', fontSize: '0.75rem', marginTop: '3px', display: 'block' }}>{formErrors.phone}</span>}
+                      {formErrors.phone && <span id="admissions-phone-error" role="alert" style={{ color: 'var(--color-red)', fontSize: '0.75rem', marginTop: '3px', display: 'block' }}>{formErrors.phone}</span>}
                     </div>
                   </div>
 
                   {/* Program of Interest Selection */}
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
+                    <label htmlFor="admissions-program" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
                       {t('selectProgram')} *
                     </label>
                     <select
+                      id="admissions-program"
+                      required
+                      aria-invalid={Boolean(formErrors.program)}
+                      aria-describedby={formErrors.program ? 'admissions-program-error' : undefined}
                       value={formData.program}
                       onChange={(e) => setFormData({ ...formData, program: e.target.value })}
                       style={{
@@ -374,16 +388,17 @@ export const Admissions = () => {
                         </option>
                       ))}
                     </select>
-                    {formErrors.program && <span style={{ color: 'var(--color-red)', fontSize: '0.75rem', marginTop: '3px', display: 'block' }}>{formErrors.program}</span>}
+                    {formErrors.program && <span id="admissions-program-error" role="alert" style={{ color: 'var(--color-red)', fontSize: '0.75rem', marginTop: '3px', display: 'block' }}>{formErrors.program}</span>}
                   </div>
 
                   {/* Campus & Shift Selection */}
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
+                      <label htmlFor="admissions-campus" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
                         {t('selectCampus')}
                       </label>
                       <select
+                        id="admissions-campus"
                         value={formData.campus}
                         onChange={(e) => setFormData({ ...formData, campus: e.target.value })}
                         style={{
@@ -401,10 +416,11 @@ export const Admissions = () => {
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
+                      <label htmlFor="admissions-shift" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
                         {t('preferredShift')}
                       </label>
                       <select
+                        id="admissions-shift"
                         value={formData.shift}
                         onChange={(e) => setFormData({ ...formData, shift: e.target.value })}
                         style={{
@@ -426,10 +442,11 @@ export const Admissions = () => {
 
                   {/* Message */}
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
+                    <label htmlFor="admissions-message" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
                       {t('message')}
                     </label>
                     <textarea 
+                      id="admissions-message"
                       rows={3}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -448,12 +465,11 @@ export const Admissions = () => {
 
                   <button 
                     type="submit" 
-                    disabled={isSubmitting}
                     className="btn-gold" 
                     style={{ width: '100%', padding: '0.85rem', fontSize: '1rem', marginTop: '0.5rem' }}
                   >
                     <Send size={18} />
-                    <span>{isSubmitting ? t('sending') : t('submitApplication')}</span>
+                    <span>{t('submitApplication')}</span>
                   </button>
                 </form>
               )}

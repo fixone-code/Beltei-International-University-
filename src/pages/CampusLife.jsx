@@ -223,6 +223,8 @@ export const CampusLife = () => {
                   <img
                     src={item.image}
                     alt={item.titleEn}
+                    loading="lazy"
+                    decoding="async"
                     style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s ease' }}
                   />
                   <span style={{

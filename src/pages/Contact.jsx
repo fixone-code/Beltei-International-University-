@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
-  MapPin, Phone, Mail, Clock, Send, 
-  CheckCircle, Globe, AlertCircle 
+  MapPin, Phone, Mail, Clock, Send,
+  CheckCircle
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { Breadcrumb } from '../components/Breadcrumb';
@@ -21,14 +21,13 @@ export const Contact = () => {
     message: ''
   });
   const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const validate = () => {
     const errs = {};
     if (!formData.name.trim()) errs.name = 'Please provide your full name';
     if (!formData.email.trim() || !/\S+@\S+\.\S+/.test(formData.email)) errs.email = 'Valid email is required';
-    if (!formData.phone.trim()) errs.phone = 'Phone number is required';
+    if (!/^[0-9]{8,15}$/.test(formData.phone.replace(/[\s()+.-]/g, ''))) errs.phone = 'Valid phone number is required';
     if (!formData.message.trim()) errs.message = 'Please enter your message';
     return errs;
   };
@@ -39,11 +38,7 @@ export const Contact = () => {
     setErrors(errs);
 
     if (Object.keys(errs).length === 0) {
-      setIsSubmitting(true);
-      setTimeout(() => {
-        setIsSubmitting(false);
-        setIsSubmitted(true);
-      }, 700);
+      setIsSubmitted(true);
     }
   };
 
@@ -159,7 +154,9 @@ export const Contact = () => {
                   <img 
                     src={selectedCampus.image} 
                     alt={selectedCampus.nameEn}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  loading="lazy"
+                  decoding="async"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                 </div>
               </div>
@@ -204,8 +201,8 @@ export const Contact = () => {
                 </h3>
                 <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
                   {language === 'km' 
-                    ? 'ក្រុមការងាររបស់យើងនឹងឆ្លើយតបយ៉ាងឆាប់រហ័ស។ (ទម្រង់បង្ហាញសាកល្បង)'
-                    : 'Our team will respond to your educational queries promptly.'}
+                    ? 'ទម្រង់នេះសម្រាប់សាកល្បងប៉ុណ្ណោះ ហើយមិនបញ្ជូនសារទៅកាន់សាកលវិទ្យាល័យទេ។ សូមប្រើលេខទូរស័ព្ទ ឬអ៊ីមែលផ្លូវការខាងលើ។'
+                    : 'This form is a demo only and does not send messages to the university. Please use the official phone number or email listed above.'}
                 </p>
               </div>
 
@@ -221,13 +218,17 @@ export const Contact = () => {
                     <CheckCircle size={32} />
                   </div>
                   <h4 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-                    {language === 'km' ? 'សារត្រូវបានកត់ត្រាជោគជ័យ!' : 'Message Received!'}
+                    {language === 'km' ? 'ការសាកល្បងបានបញ្ចប់ — មិនបានផ្ញើសារទេ' : 'Demo complete — no message was sent'}
                   </h4>
                   <p style={{ fontSize: '0.92rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', maxWidth: '420px', margin: '0 auto 1.5rem auto' }}>
                     {language === 'km'
-                      ? `សូមអរគុណ ${formData.name}! សាររបស់អ្នកត្រូវបានកត់ត្រាក្នុងការបង្ហាញគំរូនេះ។`
-                      : `Thank you, ${formData.name}. Your test message was processed successfully.`}
+                      ? `សូមអរគុណ ${formData.name}។ ទិន្នន័យនេះមិនត្រូវបានរក្សាទុក ឬបញ្ជូនទៅសាកលវិទ្យាល័យទេ។`
+                      : `Thank you, ${formData.name}. This demonstration did not store or send your message.`}
                   </p>
+                  <a className="btn-secondary" href="mailto:biu.admin@beltei.edu.kh">
+                    <Mail size={16} />
+                    Contact BIU by email
+                  </a>
                   <button 
                     onClick={() => {
                       setIsSubmitted(false);
@@ -239,14 +240,19 @@ export const Contact = () => {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                <form noValidate onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
+                      <label htmlFor="contact-name" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
                         {t('fullName')} *
                       </label>
                       <input 
+                        id="contact-name"
                         type="text"
+                        required
+                        autoComplete="name"
+                        aria-invalid={Boolean(errors.name)}
+                        aria-describedby={errors.name ? 'contact-name-error' : undefined}
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder="Your Full Name"
@@ -259,15 +265,20 @@ export const Contact = () => {
                           color: 'var(--text-primary)'
                         }}
                       />
-                      {errors.name && <span style={{ color: 'var(--color-red)', fontSize: '0.75rem', marginTop: '3px', display: 'block' }}>{errors.name}</span>}
+                      {errors.name && <span id="contact-name-error" role="alert" style={{ color: 'var(--color-red)', fontSize: '0.75rem', marginTop: '3px', display: 'block' }}>{errors.name}</span>}
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
+                      <label htmlFor="contact-email" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
                         {t('emailAddress')} *
                       </label>
                       <input 
+                        id="contact-email"
                         type="email"
+                        required
+                        autoComplete="email"
+                        aria-invalid={Boolean(errors.email)}
+                        aria-describedby={errors.email ? 'contact-email-error' : undefined}
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="your.email@example.com"
@@ -280,17 +291,22 @@ export const Contact = () => {
                           color: 'var(--text-primary)'
                         }}
                       />
-                      {errors.email && <span style={{ color: 'var(--color-red)', fontSize: '0.75rem', marginTop: '3px', display: 'block' }}>{errors.email}</span>}
+                      {errors.email && <span id="contact-email-error" role="alert" style={{ color: 'var(--color-red)', fontSize: '0.75rem', marginTop: '3px', display: 'block' }}>{errors.email}</span>}
                     </div>
                   </div>
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
+                      <label htmlFor="contact-phone" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
                         {t('phoneNumber')} *
                       </label>
                       <input 
+                        id="contact-phone"
                         type="tel"
+                        required
+                        autoComplete="tel"
+                        aria-invalid={Boolean(errors.phone)}
+                        aria-describedby={errors.phone ? 'contact-phone-error' : undefined}
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         placeholder="012 345 678"
@@ -303,14 +319,15 @@ export const Contact = () => {
                           color: 'var(--text-primary)'
                         }}
                       />
-                      {errors.phone && <span style={{ color: 'var(--color-red)', fontSize: '0.75rem', marginTop: '3px', display: 'block' }}>{errors.phone}</span>}
+                      {errors.phone && <span id="contact-phone-error" role="alert" style={{ color: 'var(--color-red)', fontSize: '0.75rem', marginTop: '3px', display: 'block' }}>{errors.phone}</span>}
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
+                      <label htmlFor="contact-subject" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
                         Subject
                       </label>
                       <input 
+                        id="contact-subject"
                         type="text"
                         value={formData.subject}
                         onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
@@ -328,11 +345,15 @@ export const Contact = () => {
                   </div>
 
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
+                    <label htmlFor="contact-message" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
                       Message *
                     </label>
                     <textarea 
+                      id="contact-message"
                       rows={4}
+                      required
+                      aria-invalid={Boolean(errors.message)}
+                      aria-describedby={errors.message ? 'contact-message-error' : undefined}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder="Write your message here..."
@@ -346,17 +367,16 @@ export const Contact = () => {
                         resize: 'vertical'
                       }}
                     />
-                    {errors.message && <span style={{ color: 'var(--color-red)', fontSize: '0.75rem', marginTop: '3px', display: 'block' }}>{errors.message}</span>}
+                    {errors.message && <span id="contact-message-error" role="alert" style={{ color: 'var(--color-red)', fontSize: '0.75rem', marginTop: '3px', display: 'block' }}>{errors.message}</span>}
                   </div>
 
                   <button 
                     type="submit" 
-                    disabled={isSubmitting}
                     className="btn-primary" 
                     style={{ width: '100%', padding: '0.85rem', fontSize: '1rem' }}
                   >
                     <Send size={18} />
-                    <span>{isSubmitting ? t('sending') : t('submitContact')}</span>
+                    <span>{t('submitContact')}</span>
                   </button>
                 </form>
               )}

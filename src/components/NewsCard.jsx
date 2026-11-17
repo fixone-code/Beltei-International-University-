@@ -13,6 +13,8 @@ export const NewsCard = ({ article }) => {
           src={article.image} 
           alt={article.titleEn}
           className="news-card-img"
+          loading="lazy"
+          decoding="async"
           onError={(e) => {
             e.target.onerror = null;
             e.target.src = '/images/news/news_debate_2026.jpg';
